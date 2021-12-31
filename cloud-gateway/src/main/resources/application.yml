@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service:8081/
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: Hystrix
+              args:
+                name: user-service
+                fallbackuri: forward:/fallback/userServiceFallBack
+        - id: movie-services
+          uri: lb://movie-services:8082/
+          predicates:
+            - Path=/movies/**
+          filters:
+            - name: Hystrix
+              args:
+                name: movie-services
+                fallbackuri: forward:/fallback/movieServiceFallBack
+                     
+
